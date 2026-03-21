@@ -89,6 +89,12 @@
       <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.evosuite</groupId>
+      <artifactId>evosuite-standalone-runtime</artifactId>
+      <version>${evosuite.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <properties>
     <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
@@ -110,6 +116,7 @@
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.encoding>utf-8</commons.encoding>
     <rat.skip>true</rat.skip>
+    <evosuite.version>1.0.6</evosuite.version>
     <!-- JaCoCo: Don't make code coverage worse than: -->
     <commons.jacoco.haltOnFailure>false</commons.jacoco.haltOnFailure>
     <commons.jacoco.classRatio>1.00</commons.jacoco.classRatio>
@@ -195,6 +202,32 @@
           </execution>
         </executions>
       </plugin>
+      <!--
+      <plugin>
+        <groupId>org.evosuite.plugins</groupId>
+        <artifactId>evosuite-maven-plugin</artifactId>
+        <version>${evosuite.version}</version>
+        <executions>
+          <execution>
+            <goals><goal>prepare</goal></goals>
+            <phase>process-test-classes</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <properties>
+            <property>
+              <name>listener</name>
+              <value>org.evosuite.runtime.InitializingListener</value>
+            </property>
+          </properties>
+        </configuration>
+      </plugin>
+      -->
       <plugin>
         <groupId>org.pitest</groupId>
         <artifactId>pitest-maven</artifactId>
@@ -206,6 +239,9 @@
           <targetTests>
             <param>org.apache.commons.cli.*</param>
           </targetTests>
+          <excludedTestClasses>
+            <param>org.apache.commons.cli.*_ESTest*</param>
+          </excludedTestClasses>
         </configuration>
         <dependencies>
           <dependency>
@@ -439,4 +475,11 @@
       </roles>
     </contributor>
   </contributors>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>EvoSuite</id>
+      <name>EvoSuite Repository</name>
+      <url>http://www.evosuite.org/m2</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
